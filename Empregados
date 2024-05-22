@@ -1,0 +1,216 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Empregado {
+    private String nome;
+    private int idade;
+    private double salario;
+
+    public Empregado(String nome, int idade, double salario) {
+        this.nome = nome;
+        this.idade = idade;
+        this.salario = salario;
+    }
+
+    // Getters e Setters
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getIdade() {
+        return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
+    public void promover() {
+        if (idade > 18) {
+            aumentarSalario(25);
+            System.out.println("Empregado promovido com sucesso!");
+        } else {
+            System.out.println("Empregado não atende aos requisitos de idade para promoção.");
+        }
+    }
+
+    public void aumentarSalario(double percentual) {
+        double novoSalario = salario * (1 + percentual / 100);
+        salario = novoSalario;
+        System.out.println("Salário aumentado para: " + novoSalario);
+    }
+
+    public void demitir(int motivo) {
+        switch (motivo) {
+            case 1: // Justa causa
+                System.out.println("Empregado demitido por justa causa. Aviso prévio deve ser cumprido.");
+                break;
+            case 2: // Decisão do empregador
+                double multa = salario * 0.4;
+                salario -= multa;
+                System.out.println("Empregado demitido. Multa de 40% aplicada ao salário: " + multa);
+                break;
+            case 3: // Aposentadoria
+                double aposentadoria;
+                if (salario >= 1000 && salario <= 2000) {
+                    aposentadoria = 1500;
+                } else if (salario > 2000 && salario <= 3000) {
+                    aposentadoria = 2500;
+                } else if (salario > 3000 && salario <= 4000) {
+                    aposentadoria = 3500;
+                } else {
+                    aposentadoria = 4000;
+                }
+                System.out.println("Empregado aposentado. Salário de aposentadoria: " + aposentadoria);
+                break;
+        }
+    }
+
+    public void fazerAniversario() {
+        idade++;
+        System.out.println("Feliz aniversário! Idade aumentada para: " + idade);
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", Idade: " + idade + ", Salário: " + salario;
+    }
+}
+
+public class Principal {
+    private ArrayList<Empregado> empregados = new ArrayList<>();
+
+    public void criarEmpregado() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o nome do empregado:");
+        String nome = scanner.nextLine();
+        System.out.println("Digite a idade do empregado:");
+        int idade = Integer.parseInt(scanner.nextLine());
+        System.out.println("Digite o salário do empregado:");
+        double salario = Double.parseDouble(scanner.nextLine());
+        Empregado empregado = new Empregado(nome, idade, salario);
+        empregados.add(empregado);
+        System.out.println("Empregado criado com sucesso!");
+    }
+
+    public void promoverEmpregado() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o nome do empregado a ser promovido:");
+        String nome = scanner.nextLine();
+        for (Empregado empregado : empregados) {
+            if (empregado.getNome().equals(nome)) {
+                empregado.promover();
+                break;
+            }
+        }
+    }
+
+    public void aumentarSalarioEmpregado() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o nome do empregado para aumentar o salário:");
+        String nome = scanner.nextLine();
+        for (Empregado empregado : empregados) {
+            if (empregado.getNome().equals(nome)) {
+                System.out.println("Digite o percentual de aumento:");
+                double percentual = Double.parseDouble(scanner.nextLine());
+                empregado.aumentarSalario(percentual);
+                break;
+            }
+        }
+    }
+
+    public void demitirEmpregado() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o nome do empregado a ser demitido:");
+        String nome = scanner.nextLine();
+        for (Empregado empregado : empregados) {
+            if (empregado.getNome().equals(nome)) {
+                System.out.println("Digite o motivo da demissão (1 - Justa causa, 2 - Decisão do empregador, 3 - Aposentadoria):");
+                int motivo = Integer.parseInt(scanner.nextLine());
+                empregado.demitir(motivo);
+                empregados.remove(empregado);
+                System.out.println("Empregado demitido com sucesso.");
+                break;
+            }
+        }
+    }
+
+    public void fazerAniversarioEmpregado() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o nome do empregado para celebrar o aniversário:");
+        String nome = scanner.nextLine();
+        for (Empregado empregado : empregados) {
+            if (empregado.getNome().equals(nome)) {
+                empregado.fazerAniversario();
+                break;
+            }
+        }
+    }
+
+    public void mostrarDetalhesEmpregados() {
+        System.out.println("Detalhes dos Empregados:");
+        for (Empregado empregado : empregados) {
+            System.out.println(empregado);
+        }
+    }
+
+    public void menu() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n=== Menu ===");
+            System.out.println("1. Criar novo empregado");
+            System.out.println("2. Promover empregado");
+            System.out.println("3. Aumentar salário do empregado");
+            System.out.println("4. Demitir empregado");
+            System.out.println("5. Fazer aniversário do empregado");
+            System.out.println("6. Mostrar detalhes dos empregados");
+            System.out.println("7. Sair");
+            System.out.println("Escolha uma opção:");
+            int opcao = Integer.parseInt(scanner.nextLine());
+
+            switch (opcao) {
+                case 1:
+                    criarEmpregado();
+                    break;
+                case 2:
+                    promoverEmpregado();
+                    break;
+                case 3:
+                    aumentarSalarioEmpregado();
+                    break;
+                case 4:
+                    demitirEmpregado();
+                    break;
+                case 5:
+                    fazerAniversarioEmpregado();
+                    break;
+                case 6:
+                    mostrarDetalhesEmpregados();
+                    break;
+                case 7:
+                    System.out.println("Saindo...");
+                    return;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Principal principal = new Principal();
+        principal.menu();
+    }
+}
